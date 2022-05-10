@@ -30,36 +30,14 @@ public class CameraDeepArPlugin implements FlutterPlugin ,ActivityAware{
   private PluginRegistry.Registrar mPluginRegistrar;
     private FlutterPluginBinding pluginBinding;
 
-  private CameraDeepArPlugin(Registrar registrar) {
-    this.mPluginRegistrar=registrar;
-  }
+    public CameraDeepArPlugin() {}
 
-  public CameraDeepArPlugin() {}
-
-  public static void registerWith(Registrar registrar) {
-    if (registrar.activity() == null)return;
-    final CameraDeepArPlugin plugin =new CameraDeepArPlugin(registrar);
-      //registrar.activity().getApplication().registerActivityLifecycleCallbacks(plugin);
-      final CameraDeepArViewFactory factory = new CameraDeepArViewFactory(registrar.activity(), registrar.messenger());
-    registrar
-            .platformViewRegistry()
-            .registerViewFactory(
-                    "plugins.flutter.io/deep_ar_camera", factory);
-  }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-//        lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
-//        lifecycle.addObserver(this);
-        final CameraDeepArViewFactory factory = new CameraDeepArViewFactory(binding.getActivity(), pluginBinding.getBinaryMessenger());
-
-        pluginBinding
-                .getPlatformViewRegistry()
-                .registerViewFactory(
-                        "plugins.flutter.io/deep_ar_camera", factory);
-
-
+        initPlugin(binding,pluginBinding);
     }
+
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
@@ -68,7 +46,7 @@ public class CameraDeepArPlugin implements FlutterPlugin ,ActivityAware{
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-
+        onAttachedToActivity(binding);
     }
 
     @Override
@@ -76,8 +54,8 @@ public class CameraDeepArPlugin implements FlutterPlugin ,ActivityAware{
 
     }
 
-    private void checkForPermission(final MethodChannel.Result result) {
-    Dexter.withContext(mPluginRegistrar.activity())
+    private void checkForPermission(ActivityPluginBinding binding,final MethodChannel.Result result) {
+    Dexter.withContext(binding.getActivity())
             .withPermissions(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
             .withListener(new MultiplePermissionsListener() {
               @Override
@@ -103,4 +81,15 @@ public class CameraDeepArPlugin implements FlutterPlugin ,ActivityAware{
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         pluginBinding = null;
     }
+
+
+    private void initPlugin(ActivityPluginBinding activityPluginBinding, FlutterPluginBinding pluginBinding) {
+        final CameraDeepArViewFactory factory = new CameraDeepArViewFactory(
+                activityPluginBinding,pluginBinding);
+        pluginBinding
+                .getPlatformViewRegistry()
+                .registerViewFactory(
+                        "plugins.flutter.io/deep_ar_camera", factory);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.camera_deep_ar;
 
+
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -35,7 +36,7 @@ public class CameraGrabber
 
     private int width = 640;
     private int height = 480;
-    private CameraResolutionPreset resolutionPreset = CameraResolutionPreset.P640x480;
+    private CameraResolutionPreset resolutionPreset = CameraResolutionPreset.P1920x1080;
 
     private int screenOrientation = 0;
 
@@ -150,7 +151,6 @@ public class CameraGrabber
         private  int screenOrientation;
         CameraHandlerThread(CameraGrabberListener listener, int width, int height, int screenOrientation) {
             super("CameraHandlerThread");
-
             this.listener = listener;
             this.width = width;
             this.height = height;
@@ -198,7 +198,11 @@ public class CameraGrabber
                                 buffers[currentBuffer].put(data);
                                 buffers[currentBuffer].position(0);
                                 if (frameReceiver != null) {
-                                    frameReceiver.receiveFrame(buffers[currentBuffer], width,height, cameraOrientation, cameraDevice == Camera.CameraInfo.CAMERA_FACING_FRONT);
+                                  ByteBuffer buffer =buffers[currentBuffer];
+//                                    DeepARImageFormat imageFormat = DeepARImageFormat.YUV_420_888;
+                                    boolean mirror =cameraDevice == Camera.CameraInfo.CAMERA_FACING_FRONT;
+//                                    frameReceiver.receiveFrame(buffer,width,height,cameraOrientation,mirror,imageFormat,500);
+                                    frameReceiver.receiveFrame(buffer,width,height,cameraOrientation,mirror);
                                 }
                                 currentBuffer = ( currentBuffer + 1 ) % NUMBER_OF_BUFFERS;
                             }

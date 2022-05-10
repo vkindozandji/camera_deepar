@@ -31,8 +31,8 @@ A new Flutter plugin.
 #    'Effects' => ['camera_deep_ar/Effects/**/*']
 #  }
 #  s.resource = 'Pod/Resources/**/*'
-  s.resources = ['Effects/*']
-  s.resource_bundle = { 'Effects' => 'Effects/*.' }
+#  s.resources = ['Effects/*']
+#  s.resource_bundle = { 'Effects' => 'Effects/*.' }
 
 
 
