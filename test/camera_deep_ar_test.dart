@@ -1,3 +1,4 @@
+import 'package:camera_deep_ar/camera_deep_ar.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,7 +17,7 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
-  test('getPlatformVersion', () async {
-    //expect(await CameraDeepAr.platformVersion, '42');
+  test('getPlatformVersion', (){
+    CameraDeepAr cam = CameraDeepAr(androidLicenceKey: '', cameraDeepArCallback: (CameraDeepArController controller) {  }, iosLicenceKey: '', onCameraReady: (bool isCameraReady) {  }, onImageCaptured: (String path) {  }, onVideoRecorded: (String path) {  },);
   });
 }
